@@ -79,6 +79,7 @@ public class RabbitMQConfig {
                 .deadLetterExchange(this.deadLetterExchange)
                 .build();
 
+        // after BASE_TTL time, the message in deadLetterQ will resend to exchange to retry process
         Queue deadLetterQ = QueueBuilder
                 .durable(this.deadLetterQueue)
                 .withArgument("x-queue-type", "classic")
