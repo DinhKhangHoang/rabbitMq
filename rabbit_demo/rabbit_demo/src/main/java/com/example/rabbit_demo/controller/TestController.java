@@ -14,7 +14,7 @@ public class TestController {
     private final RabbitTemplate rabbitTemplate;
 
     @GetMapping("/test")
-    public void reloadConfig() {
+    public void test() {
         rabbitTemplate.convertAndSend
                 (RabbitMQConfig.getInstanceRef().getExchange()
                         , RabbitMQConfig.getInstanceRef().getRoutingKeyHello(), "hi guide");
