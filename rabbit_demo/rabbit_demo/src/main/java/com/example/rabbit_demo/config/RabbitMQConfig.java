@@ -29,11 +29,13 @@ public class RabbitMQConfig {
 
     private final String routingKeyReloadConfigDB;
     private final String routingKeyHello;
+    private final Integer consumerTimeout;
 
     public RabbitMQConfig(@Value("${rabbitmq.test.exchange}") String exchange,
                           @Value("${rabbitmq.test.queue}") String queue,
                           @Value("${rabbitmq.test.routing-key.reload}") String routingKeyReloadConfigDB,
-                          @Value("${rabbitmq.test.routing-key.hello}") String routingKeyHello) {
+                          @Value("${rabbitmq.test.routing-key.hello}") String routingKeyHello,
+                          @Value("${rabbitmq.test.queue.x-consumer-timeout}") String consumerTimeoutStr) {
         this.exchange = exchange;
         this.deadLetterExchange = exchange + ".DLQ";
 
@@ -46,6 +48,8 @@ public class RabbitMQConfig {
         //routing key
         this.routingKeyReloadConfigDB = routingKeyReloadConfigDB;
         this.routingKeyHello = routingKeyHello;
+
+        this.consumerTimeout = Integer.parseInt(consumerTimeoutStr);
 
         initConstructor(this);
     }
@@ -76,6 +80,7 @@ public class RabbitMQConfig {
         Queue q = QueueBuilder
                 .durable(this.queue)
                 .withArgument("x-queue-type", "classic")
+                .withArgument("x-consumer-timeout", this.consumerTimeout)
                 .deadLetterExchange(this.deadLetterExchange)
                 .build();
 

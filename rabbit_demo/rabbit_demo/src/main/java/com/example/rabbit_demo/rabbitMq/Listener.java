@@ -2,6 +2,9 @@ package com.example.rabbit_demo.rabbitMq;
 
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+
+import java.time.Duration;
+
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.ImmediateAcknowledgeAmqpException;
 import org.springframework.amqp.core.Message;
@@ -21,6 +24,7 @@ public class Listener {
             System.out.println("Listener message: " + new String(message.getBody()));
             String routingKey = message.getMessageProperties().getReceivedRoutingKey();
 
+            Thread.sleep(Duration.ofSeconds(120));
             workerFactory.getWorker(routingKey).run(new String(message.getBody()));
         } catch (Exception e) {
             System.out.println("BillingGatewayListener: Process message from queue is failed: " + e.getMessage());
